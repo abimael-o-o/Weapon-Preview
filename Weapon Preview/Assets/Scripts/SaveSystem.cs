@@ -6,9 +6,9 @@ using UnityEditor;
 
 public static class SaveSystem
 {
-    public static void SaveManager(Weapon wpn)
+    public static void SaveManager(Weapon wpn, string id)
     {
-        string path = Application.persistentDataPath + "/test.dat";
+        string path = Application.persistentDataPath + "/test" + id + ".dat";
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream stream = new FileStream(path, FileMode.Create);
 
@@ -18,9 +18,9 @@ public static class SaveSystem
         stream.Close();
         Debug.Log("Your data is saved!");
     }
-    public static WeaponsData LoadManager()
+    public static WeaponsData LoadManager(string id)
     {
-        string path = Application.persistentDataPath + "/test.dat";
+        string path = Application.persistentDataPath + "/test" + id + ".dat";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -34,18 +34,6 @@ public static class SaveSystem
         {
             Debug.LogError("That didn't work!");
             return null;
-        }
-    }
-    public static int Tries()
-    {
-        int i = 1;
-        if (i == 1)
-        {
-            return 1;
-        }
-        else
-        {
-            return 0;
         }
     }
 }

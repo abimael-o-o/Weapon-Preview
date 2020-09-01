@@ -11,17 +11,23 @@ public class Weapon : MonoBehaviour
     public Material weaponMat;
     public string str;
     public string assetPath;
+    public int FirstTime;
+    public string id;
 
     private void Start()
     {
-        int i = SaveSystem.Tries();
-        if(i == 1)
+        id = this.name;
+        FirstTime = PlayerPrefs.GetInt("FirstTime");
+        if (FirstTime == 0)
         {
-            loadData();
+            loadDefault();
+            Debug.Log("first run");
+            PlayerPrefs.SetInt("FirstTime", 1);
         }
         else
         {
-            loadDefault();
+            loadData();
+            Debug.Log("welcome again!");
         }
     }
     public void getCurrentMaterial()
@@ -35,14 +41,13 @@ public class Weapon : MonoBehaviour
     {
         getCurrentMaterial();
         assetPath = "Assets/Materials/" + str + ".mat";
-        SaveSystem.SaveManager(this);
-        SaveSystem.Tries();
+        SaveSystem.SaveManager(this, id);
     }
     public void loadData()
-    {
-        WeaponsData data = SaveSystem.LoadManager();
+    { 
+        WeaponsData data = SaveSystem.LoadManager(id);
         assetPath = data.assetPath;
-        str = data.weaponSkin;
+        str       = data.weaponSkin;
 
         Material mat = AssetDatabase.LoadAssetAtPath(assetPath, typeof(Material)) as Material;
         GetComponent<MeshRenderer>().material = mat;
@@ -50,6 +55,7 @@ public class Weapon : MonoBehaviour
     }
     public void loadDefault()
     {
+        saveData();
         Debug.Log("Default Skin!");
     }
 }
